@@ -17,11 +17,11 @@ public class Constellation {
     private String name;
 
     // Maybe linked list?
-    private List<Object> starList;
+    private String starList;
 
     Constellation() {}
 
-    Constellation(String name, List<Object> starList) {
+    Constellation(String name, String starList) {
         this.name = name;
         // make a copy before assignment?
         this.starList = starList;
