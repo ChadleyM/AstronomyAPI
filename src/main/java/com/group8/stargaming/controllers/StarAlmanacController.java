@@ -1,13 +1,13 @@
 package com.group8.stargaming.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.group8.stargaming.models.StarDetailsID;
+import com.group8.stargaming.utils.ValidationTools;
+import org.springframework.web.bind.annotation.*;
 
-import com.group8.stargaming.models.StarAlmanac;
+import com.group8.stargaming.models.StarDetails;
 import com.group8.stargaming.repositories.StarAlmanacRepository;
 
 @RestController
@@ -20,14 +20,18 @@ public class StarAlmanacController {
     }
 
     @GetMapping("/find")
-    List<StarAlmanac> all() {
+    List<StarDetails> all() {
         return repository.findAll();
     }
 
-    @GetMapping("/{id}")
-    void one(@PathVariable Long id) {
-    	StarAlmanac sa = new StarAlmanac("Jenny", "11/04/2022");
-    	repository.save(sa);
-        return;
+    @GetMapping("/starPosition")
+    public Optional<StarDetails> one(@RequestParam String name, @RequestParam String date) {
+    	boolean isValidDate = ValidationTools.isValidDate(date);
+        if (!isValidDate) {
+            return null;
+        }
+        StarDetailsID starID = new StarDetailsID(date, name);
+
+        return repository.findById(starID);
     }
 }

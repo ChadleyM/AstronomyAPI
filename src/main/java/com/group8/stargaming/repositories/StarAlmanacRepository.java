@@ -1,9 +1,10 @@
 package com.group8.stargaming.repositories;
 
+import com.group8.stargaming.models.StarDetailsID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.group8.stargaming.models.StarAlmanac;
+import com.group8.stargaming.models.StarDetails;
 
-public interface StarAlmanacRepository extends JpaRepository<StarAlmanac, Long>{
+public interface StarAlmanacRepository extends JpaRepository<StarDetails, StarDetailsID>{
 
 }
