@@ -2,6 +2,8 @@ package com.group8.stargaming.models;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Embeddable
@@ -9,6 +11,8 @@ public class StarDetailsID implements Serializable {
     private static final long serialVersionUID = -6414032688628222148L;
     private String date;
     private String star_name;
+
+//    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public StarDetailsID() {}
 

@@ -1,5 +1,7 @@
 package com.group8.stargaming.controllers;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,12 +29,22 @@ public class StarAlmanacController {
 
     @GetMapping("/starPosition")
     public ResponseEntity<Object> one(@RequestParam String name, @RequestParam String date, @RequestParam String time,
-                                      @RequestParam Double latitude, @RequestParam Double longitude) {
-//        if (!validationTools.isValidDate(date)) {
-//            return new ResponseEntity<>("Invalid date specified. A date for the year 2022 is expected in the format: yyyy-mm-dd", HttpStatus.BAD_REQUEST);
-//        }
+                                      @RequestParam Double latitude, @RequestParam Double longitude,
+                                      @RequestParam Optional<Double> obsAltitude, @RequestParam Optional<Double> obsAzimuth) {
+        if (!validationTools.isValidDate(date, time)) {
+            return new ResponseEntity<>("Invalid date specified. A date for the year 2022 is expected in the format: yyyy-mm-dd", HttpStatus.BAD_REQUEST);
+        }
+
+        if (obsAltitude.isPresent() ^ obsAzimuth.isPresent() ) {
+            return new ResponseEntity<>("Both an altitude and azimuth must be supplied to use star finding service", HttpStatus.BAD_REQUEST);
+        } else if (!validationTools.isValidObsInput(obsAltitude, obsAzimuth)) {
+            return new ResponseEntity<>("Incorrect ranges for observer altitude or azimuth. Altitude is in the range of [0, 90] and Azimuth is in the range of [-180, 180]", HttpStatus.BAD_REQUEST);
+        }
+
+        LocalDateTime dateTime = LocalDateTime.parse(date + "T" + time);
         StarDetailsID starID = new StarDetailsID(date, name);
-        Optional<StarDetails> starPosition = starCalculations.findStar(starID, time, latitude, longitude);
+        Optional<StarDetails> starPosition = starCalculations.findStar(starID, dateTime, latitude, longitude, obsAltitude, obsAzimuth);
+
         if (starPosition.isPresent())
             return new ResponseEntity<>(starPosition, HttpStatus.OK);
         else
