@@ -2,8 +2,6 @@ package com.group8.stargaming.models;
 
 import lombok.Data;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -15,15 +13,12 @@ import javax.persistence.Id;
 public class Constellation {
     private @Id @GeneratedValue Long id;
     private String name;
+    private List<ConstellationEdge> edgeList;
 
-    // Maybe linked list?
-    private String starList;
+    public Constellation() {}
 
-    Constellation() {}
-
-    Constellation(String name, String starList) {
+    public Constellation(String name, List<ConstellationEdge> edgeList) {
         this.name = name;
-        // make a copy before assignment?
-        this.starList = starList;
+        this.edgeList = edgeList;
     }
 }

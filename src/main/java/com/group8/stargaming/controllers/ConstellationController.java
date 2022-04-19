@@ -26,8 +26,8 @@ public class ConstellationController {
         return repository.findAll();
     }
 
-    @GetMapping("/{id}")
-    Constellation one(@PathVariable Long id) {
-        return repository.findById(id).orElseThrow(() -> new ConstellationNotFoundException(id));
+    @GetMapping("/{name}")
+    Constellation one(@PathVariable String name) {
+        return repository.findByName(name).orElseThrow(() -> new ConstellationNotFoundException(name));
     }
 }
