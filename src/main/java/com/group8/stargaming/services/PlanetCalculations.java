@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.group8.stargaming.models.MoonTracker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,15 +34,25 @@ public class PlanetCalculations {
         Map<String, Object> requestParams = packageRequestParams(name, latitude, longitude, date, time);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", API_KEY);
-        HttpEntity request = new HttpEntity(headers);
+        HttpEntity<String> request = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.GET, request, String.class, requestParams);
         Map<String, Object> jsonResponseBody = objectMapper.readValue(response.getBody(), Map.class);
+//        if (name.equals("moon") ){
+//            Optional<MoonTracker> moonDetails = buildMoonDetails(jsonResponseBody);
+//            return  moonDetails;
+//        }
         Optional<PlanetDetails> planetDetails = buildPlanetDetails(jsonResponseBody);
         return planetDetails;
     }
 
+
+
+
+
+
     private Optional<PlanetDetails> buildPlanetDetails(Map<String, Object> jsonResponseBody) {
         try {
+
             Map<String, Object> data = (Map<String, Object>) jsonResponseBody.get("data");
             Map<String, Object> table = (Map<String, Object>) data.get("table");
             ArrayList<Map<String, Object>> rows = (ArrayList<Map<String, Object>>) table.get("rows");
