@@ -11,8 +11,7 @@ import java.io.Serializable;
 @Entity
 public class StarDetails {
 
-	@EmbeddedId
-	private StarDetailsID starDetailsID;
+	private @Id @GeneratedValue Long id;
 	private double gha;
 	private double declination;
 	@Transient
@@ -24,52 +23,11 @@ public class StarDetails {
 	@Transient
 	private Double altitudeCorrection;
 
+	private String date;
+	private String star_name;
+
 	public StarDetails() {
 		this.altitude = null;
 		this.azimuth = null;
-	};
-
-	public Double getAzimuthCorrection() {
-		return azimuthCorrection;
-	}
-
-	public void setAzimuthCorrection(Double azimuthCorrection) {
-		this.azimuthCorrection = azimuthCorrection;
-	}
-
-	public Double getAltitudeCorrection() {
-		return altitudeCorrection;
-	}
-
-	public void setAltitudeCorrection(Double altitudeCorrection) {
-		this.altitudeCorrection = altitudeCorrection;
-	}
-
-	public StarDetailsID getStarDetailsID() {
-		return starDetailsID;
-	}
-
-	public Double getGha() {
-		return gha;
-	}
-
-	public Double getDeclination() {
-		return declination;
-	}
-
-	public Double getAltitude() {
-		return altitude;
-	}
-
-	public void setAltitude(Double altitude) {
-		this.altitude = altitude;
-	}
-
-	public Double getAzimuth() {
-		return azimuth;
-	}
-
-	public void setAzimuth(Double azimuth) {
-		this.azimuth = azimuth;
 	}
 }

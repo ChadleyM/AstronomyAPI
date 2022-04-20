@@ -1,6 +1,8 @@
 package com.group8.stargaming.controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.group8.stargaming.models.Constellation;
 import com.group8.stargaming.models.ConstellationEdge;
@@ -34,11 +36,10 @@ public class ConstellationController {
     }
 
     @GetMapping("/mapping")
-    void mapping(@RequestBody ConstellationMapping body) {
-//        List<Constellation> constellations = repository.findAllByStars(body.getStarList())
-//                .orElseThrow(() -> new RuntimeException("No constellation to map"));
-
-
+    List<Constellation> mapping(@RequestBody ConstellationMapping body) {
+        return repository.findAll().stream()
+                .filter((c) -> c.starListContainsEdges(body.getStarList()))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/validate")
