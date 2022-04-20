@@ -4,13 +4,13 @@ import java.util.List;
 
 import com.group8.stargaming.models.Constellation;
 import com.group8.stargaming.models.ConstellationEdge;
+import com.group8.stargaming.models.Image;
 import com.group8.stargaming.models.StarDetails;
 import com.group8.stargaming.repositories.ConstellationRepository;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.group8.stargaming.models.Image;
 import com.group8.stargaming.repositories.ConstellationImageRepository;
 
 @RestController
@@ -18,14 +18,10 @@ import com.group8.stargaming.repositories.ConstellationImageRepository;
 public class ConstellationController {
 
     @Autowired
-    private final ConstellationRepository repository;
-
-    @Autowired
     private ConstellationRepository repository;
 
     @Autowired
     private ConstellationImageRepository imageRepository;
-
 
     @GetMapping("/")
     List<Constellation> all() {
@@ -42,8 +38,6 @@ public class ConstellationController {
     void mapping(@RequestBody ConstellationMapping body) {
 //        List<Constellation> constellations = repository.findAllByStars(body.getStarList())
 //                .orElseThrow(() -> new RuntimeException("No constellation to map"));
-
-
     }
 
     @GetMapping("/validate")
@@ -52,6 +46,11 @@ public class ConstellationController {
 //                .orElseThrow(() -> new RuntimeException("You did not draw it correctly"));
 //
 //        System.out.println(constellation);
+    }
+
+    @GetMapping("/image/{name}")
+    Image getImage(@PathVariable String name) {
+        return imageRepository.findByname(name).orElseThrow(() -> new RuntimeException("Could not find constellation " + name));
     }
 
 
@@ -75,11 +74,6 @@ public class ConstellationController {
         public ConstellationValidate(List<ConstellationEdge> edgeList) {
             this.edgeList = edgeList;
         }
-    }
-    
-    @GetMapping("/image/{name}")
-    Image one(@PathVariable String name) {
-        return imageRepository.findByName(name).orElseThrow(() -> new RuntimeException("Could not find constellation " + name));
     }
 
 }
