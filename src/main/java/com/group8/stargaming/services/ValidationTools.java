@@ -24,7 +24,7 @@ public class ValidationTools {
         if (obsAltitude.isPresent() && obsAzimuth.isPresent()) {
             return obsAltitude.get() >= 0 && obsAltitude.get() <= 90 && obsAzimuth.get() >= 0 && obsAzimuth.get() <= 360;
         } else {
-            return false;
+            return true;
         }
     }
 }

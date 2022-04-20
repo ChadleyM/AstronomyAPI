@@ -3,16 +3,13 @@ package com.group8.stargaming.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group8.stargaming.models.PlanetDetails;
-import com.group8.stargaming.models.StarDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import com.group8.stargaming.models.MoonTracker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +27,8 @@ public class PlanetCalculations {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public Optional<PlanetDetails> findPlanet(String name, double latitude, double longitude, String date, String time) throws JsonProcessingException {
+    public Optional<PlanetDetails> findPlanet(String name, double latitude, double longitude, String date, String time,
+                                              Optional<Double> obsAltitude, Optional<Double> obsAzimuth) throws JsonProcessingException {
         Map<String, Object> requestParams = packageRequestParams(name, latitude, longitude, date, time);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", API_KEY);
@@ -38,6 +36,16 @@ public class PlanetCalculations {
         ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.GET, request, String.class, requestParams);
         Map<String, Object> jsonResponseBody = objectMapper.readValue(response.getBody(), Map.class);
         Optional<PlanetDetails> planetDetails = buildPlanetDetails(jsonResponseBody);
+        if (planetDetails.isPresent() && obsAltitude.isPresent() && obsAzimuth.isPresent()) {
+            double altCorrection = planetDetails.get().getAltitude() - obsAltitude.get();
+            if (planetDetails.get().getAltitude() > 0) {
+                planetDetails.get().setAltitudeCorrection(altCorrection);
+            } else {
+                planetDetails.get().setAltitudeCorrection(null);
+            }
+            double azCorrection = (planetDetails.get().getAzimuth() - obsAzimuth.get()) % 180;
+            planetDetails.get().setAzimuthCorrection(azCorrection);
+        }
         return planetDetails;
     }
 

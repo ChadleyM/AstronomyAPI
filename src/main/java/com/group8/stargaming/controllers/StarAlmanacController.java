@@ -35,10 +35,10 @@ public class StarAlmanacController {
             return new ResponseEntity<>("Invalid date specified. A date for the year 2022 is expected in the format: yyyy-mm-dd", HttpStatus.BAD_REQUEST);
         }
 
-        if (obsAltitude.isPresent() ^ obsAzimuth.isPresent() ) {
+        if (obsAltitude.isPresent() ^ obsAzimuth.isPresent()) {
             return new ResponseEntity<>("Both an altitude and azimuth must be supplied to use star finding service", HttpStatus.BAD_REQUEST);
         } else if (!validationTools.isValidObsInput(obsAltitude, obsAzimuth)) {
-            return new ResponseEntity<>("Incorrect ranges for observer altitude or azimuth. Altitude is in the range of [0, 90] and Azimuth is in the range of [-180, 180]", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Incorrect ranges for observer altitude or azimuth. Altitude is in the range of [0, 90] and Azimuth is in the range of [0, 360]", HttpStatus.BAD_REQUEST);
         }
 
         LocalDateTime dateTime = LocalDateTime.parse(date + "T" + time);
@@ -54,8 +54,21 @@ public class StarAlmanacController {
     public ResponseEntity<Object> planetPosition(@RequestParam String name, @RequestParam String date, @RequestParam String time,
                                                @RequestParam Double latitude, @RequestParam Double longitude,
                                                @RequestParam Optional<Double> obsAltitude, @RequestParam Optional<Double> obsAzimuth) throws JsonProcessingException {
+        if (!validationTools.isValidDate(date, time)) {
+            return new ResponseEntity<>("Invalid date specified. A date for the year 2022 is expected in the format: yyyy-mm-dd", HttpStatus.BAD_REQUEST);
+        }
 
-        Optional<PlanetDetails> planetDetails = planetCalculations.findPlanet(name, latitude, longitude, date, time);
-        return new ResponseEntity<>(planetDetails, HttpStatus.OK);
+        if (obsAltitude.isPresent() ^ obsAzimuth.isPresent()) {
+            return new ResponseEntity<>("Both an altitude and azimuth must be supplied to use star finding service", HttpStatus.BAD_REQUEST);
+        } else if (!validationTools.isValidObsInput(obsAltitude, obsAzimuth)) {
+            return new ResponseEntity<>("Incorrect ranges for observer altitude or azimuth. Altitude is in the range of [0, 90] and Azimuth is in the range of [0, 360]", HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<PlanetDetails> planetDetails = planetCalculations.findPlanet(name, latitude, longitude, date, time, obsAltitude, obsAzimuth);
+
+        if (planetDetails.isPresent())
+            return new ResponseEntity<>(planetDetails, HttpStatus.OK);
+        else
+            return new ResponseEntity<>("The position of the requested planet can not be calculated", HttpStatus.BAD_REQUEST);
     }
 }
