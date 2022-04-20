@@ -37,18 +37,9 @@ public class PlanetCalculations {
         HttpEntity<String> request = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.GET, request, String.class, requestParams);
         Map<String, Object> jsonResponseBody = objectMapper.readValue(response.getBody(), Map.class);
-//        if (name.equals("moon") ){
-//            Optional<MoonTracker> moonDetails = buildMoonDetails(jsonResponseBody);
-//            return  moonDetails;
-//        }
         Optional<PlanetDetails> planetDetails = buildPlanetDetails(jsonResponseBody);
         return planetDetails;
     }
-
-
-
-
-
 
     private Optional<PlanetDetails> buildPlanetDetails(Map<String, Object> jsonResponseBody) {
         try {

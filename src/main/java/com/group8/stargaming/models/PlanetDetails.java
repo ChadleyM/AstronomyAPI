@@ -1,7 +1,5 @@
 package com.group8.stargaming.models;
 
-import javax.persistence.Transient;
-
 public class PlanetDetails {
     private Double rightAscension;
     private Double declination;

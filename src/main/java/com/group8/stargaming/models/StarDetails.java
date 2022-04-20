@@ -4,8 +4,6 @@ import javax.persistence.*;
 
 import lombok.Data;
 
-import java.io.Serializable;
-
 @Data
 @Table(name = "Star_Details")
 @Entity
