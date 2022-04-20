@@ -10,6 +10,8 @@ import com.group8.stargaming.repositories.ConstellationRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.group8.stargaming.models.Image;
+import com.group8.stargaming.repositories.ConstellationImageRepository;
 
 @RestController
 @RequestMapping("/constellation")
@@ -18,9 +20,12 @@ public class ConstellationController {
     @Autowired
     private final ConstellationRepository repository;
 
-    ConstellationController(ConstellationRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private ConstellationRepository repository;
+
+    @Autowired
+    private ConstellationImageRepository imageRepository;
+
 
     @GetMapping("/")
     List<Constellation> all() {
@@ -72,4 +77,9 @@ public class ConstellationController {
         }
     }
     
+    @GetMapping("/image/{name}")
+    Image one(@PathVariable String name) {
+        return imageRepository.findByName(name).orElseThrow(() -> new RuntimeException("Could not find constellation " + name));
+    }
+
 }
