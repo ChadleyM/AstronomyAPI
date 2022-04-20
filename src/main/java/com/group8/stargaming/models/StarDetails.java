@@ -14,6 +14,7 @@ public class StarDetails {
 	@EmbeddedId
 	private StarDetailsID starDetailsID;
 	private double gha;
+	@Column(name = "dec")
 	private double declination;
 	@Transient
 	private Double altitude;
