@@ -29,6 +29,4 @@ public class MoonTrackerController {
         Optional<MoonTracker> moonTracker = moonTrackerCalculations.findMoon("moon", latitude,longitude,date,time);
         return  new ResponseEntity<>(moonTracker, HttpStatus.OK);
     }
-
-
 }

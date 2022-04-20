@@ -1,21 +1,15 @@
 package com.group8.stargaming.controllers;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.group8.stargaming.models.Constellation;
 import com.group8.stargaming.models.ConstellationEdge;
-import com.group8.stargaming.models.StarDetails;
 import com.group8.stargaming.repositories.ConstellationRepository;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.group8.stargaming.models.Image;
-import com.group8.stargaming.repositories.ConstellationImageRepository;
 
 @RestController
 @RequestMapping("/constellation")
@@ -51,6 +45,9 @@ public class ConstellationController {
         Constellation constellation = repository.findByName(name)
                 .orElseThrow(() -> new RuntimeException("Constellation not found"));
 
+        if (constellation.getEdgeList().size() != body.getEdgeList().size()) {
+            return false;
+        }
         boolean match;
         for (ConstellationEdge ce: constellation.getEdgeList()) {
             match = false;
@@ -65,15 +62,8 @@ public class ConstellationController {
                 return false;
             }
         }
-
         return true;
     }
-
-    @GetMapping("/test")
-    void test(@RequestBody TestBody body) {
-        System.out.println(body.test);
-    }
-
 
     @Data
     private static class ConstellationMapping {
@@ -108,10 +98,5 @@ public class ConstellationController {
             this.vertex1 = vertex1;
             this.vertex2 = vertex2;
         }
-    }
-
-    @Data
-    private static class TestBody {
-        private List<String> test;
     }
 }

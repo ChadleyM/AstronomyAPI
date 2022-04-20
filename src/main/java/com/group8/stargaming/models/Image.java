@@ -15,8 +15,12 @@ public class Image {
     private String name;
     private String constellationUrl;
 
-    Image(String name, String constellationUrl) {
+    public Image() {
+    }
+
+    public Image(String name, String constellationUrl) {
         this.name = name;
         this.constellationUrl = constellationUrl;
     }
+
 }

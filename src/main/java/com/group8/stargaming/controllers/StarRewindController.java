@@ -19,5 +19,4 @@ public class StarRewindController {
         List<StarRewind> list = starRewindRepository.findAllByDate(date);
         return Optional.of(list);
     }
-
 }
