@@ -7,19 +7,21 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Data
-@Table(name = "Constellation_Star")
+@Table(name = "Constellations_Star")
 @Entity
 public class ConstellationEdge implements Serializable {
     private @Id @GeneratedValue Long id;
 
     @ManyToOne
-    @JoinColumn(name="constellation_id")
+    @JoinColumn(name="constellationid")
     private Constellation constellation;
 
     @ManyToOne
+    @JoinColumn(name="starid_1")
     private StarDetails star1;
 
     @ManyToOne
+    @JoinColumn(name="starid_2")
     private StarDetails star2;
 
     public ConstellationEdge() {}
