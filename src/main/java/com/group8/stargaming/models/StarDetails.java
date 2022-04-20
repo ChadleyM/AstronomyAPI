@@ -13,6 +13,7 @@ public class StarDetails {
 
 	private @Id @GeneratedValue Long id;
 	private double gha;
+	@Column(name = "dec")
 	private double declination;
 	@Transient
 	private Double altitude;
@@ -24,6 +25,7 @@ public class StarDetails {
 	private Double altitudeCorrection;
 
 	private String date;
+	@Column(name = "name")
 	private String star_name;
 
 	public StarDetails() {
