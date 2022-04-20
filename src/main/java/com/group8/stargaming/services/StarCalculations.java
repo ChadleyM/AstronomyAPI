@@ -1,13 +1,11 @@
 package com.group8.stargaming.services;
 
 import com.group8.stargaming.models.StarDetails;
-import com.group8.stargaming.models.StarDetailsID;
 import com.group8.stargaming.repositories.StarAlmanacRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Optional;
 
 @Service
@@ -18,7 +16,7 @@ public class StarCalculations {
     private final double ARIES_OFFSET = 101.445647;
     private final int[] MONTH_OFFSET = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 
-    public Optional<StarDetails> findStar(StarDetailsID starDetailsID, LocalDateTime dateTime, double latitude,
+    public Optional<StarDetails> findStar(long starDetailsID, LocalDateTime dateTime, double latitude,
                                           double longitude, Optional<Double> obsAltitude, Optional<Double> obsAzimuth) {
         Optional<StarDetails> starDetails = starAlmanacRepository.findById(starDetailsID);
         double dateOffset = calculateDateOffset(dateTime);

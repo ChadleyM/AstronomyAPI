@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.group8.stargaming.models.PlanetDetails;
-import com.group8.stargaming.models.StarDetailsID;
 import com.group8.stargaming.services.PlanetCalculations;
 import com.group8.stargaming.services.StarCalculations;
 import com.group8.stargaming.services.ValidationTools;
@@ -29,7 +28,7 @@ public class StarAlmanacController {
     PlanetCalculations planetCalculations;
 
     @GetMapping("/starPosition")
-    public ResponseEntity<Object> starPosition(@RequestParam String name, @RequestParam String date, @RequestParam String time,
+    public ResponseEntity<Object> starPosition(@RequestParam long starID, @RequestParam String date, @RequestParam String time,
                                       @RequestParam double latitude, @RequestParam double longitude,
                                       @RequestParam Optional<Double> obsAltitude, @RequestParam Optional<Double> obsAzimuth) {
         if (!validationTools.isValidDate(date, time)) {
@@ -43,7 +42,6 @@ public class StarAlmanacController {
         }
 
         LocalDateTime dateTime = LocalDateTime.parse(date + "T" + time);
-        StarDetailsID starID = new StarDetailsID(date, name);
         Optional<StarDetails> starPosition = starCalculations.findStar(starID, dateTime, latitude, longitude, obsAltitude, obsAzimuth);
 
         if (starPosition.isPresent())
